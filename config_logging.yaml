@@ -1,0 +1,23 @@
+version: 1
+formatters:
+  simple:
+    format: '[%(asctime)s] %(message)s'
+    datefmt: '%a %d %b %Y %H:%M:%S'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+  file_handler_main:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    filename: './log/main.log'
+    maxBytes: 10485760
+    backupCount: 3
+    formatter: simple
+  
+loggers:
+  mainLogger:
+    level: INFO
+    handlers: [console,file_handler_main]
