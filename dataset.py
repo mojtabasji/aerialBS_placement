@@ -35,7 +35,7 @@ def make_empty_region(
 ):
     new_users = []
     small_width, small_height = (width / grid_w), (height / grid_h)
-    if region_list is None:
+    if region_list is None:  # create a list of empty regions
         region_list = []
         for i in range(number_empty):
             while True:
@@ -44,7 +44,7 @@ def make_empty_region(
                 if (random_x, random_y) not in region_list:
                     break
             region_list.append((random_x, random_y))
-    for user in users:
+    for user in users:  # check if user is in empty region change its position
         if is_attachable(region_list, user, small_width, small_height):
             new_users.append(user)
 

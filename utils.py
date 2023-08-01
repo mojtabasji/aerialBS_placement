@@ -18,7 +18,8 @@ def get_distance(point1, point2):
 def get_pic_path(dir):
     now = datetime.now()
     # dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
-    return dir + "/" + str(now)[:-4] + ".png"
+    # return dir + "/" + str(now)[:-4] + ".png"
+    return dir + "/" + str(now).replace(":", "-") + ".png"
 
 
 def create_dir(dir):

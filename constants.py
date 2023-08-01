@@ -6,14 +6,14 @@ MAX_K = 2
 # Pij constants
 PT = 2
 ## power index reduction unit
-PIRU = 0.1
+PIRU = 0.1   # reduction unit
 DT = 1
 DR = 1
 F = 1.6  # GHz
-LAMBDA = 1 / F
+LAMBDA = 1 / F  # signal Wavelength
 PI = 3.14
-SIGMA2 = 0
-B = 1
+SIGMA2 = 0  # noise power in dBm
+B = 1   # bandwidth
 
 
 PERCENT_POWER = 1
