@@ -1,4 +1,4 @@
-numpy
-matplotlib
-PyYAML
-scikit-learn
+numpy~=1.25.1
+matplotlib~=3.7.2
+PyYAML~=6.0.1
+scikit-learn~=1.3.0
