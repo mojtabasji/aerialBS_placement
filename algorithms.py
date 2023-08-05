@@ -56,7 +56,7 @@ def MOP(
 ):
     method_prob, method_upas = get_methods(method)
     start = time.time()
-    min_pt = PIRU * PT
+    min_pt = None   # PIRU * PT
     piru = PIRU
     R = calc_R(bss, association_array, bss_weights, min_pt)
     repo.obf_init = objective_function(R)
@@ -64,7 +64,7 @@ def MOP(
     repo.obf_time_list.append((obf, 0))
     logger.info("objective= %.3f" % obf)
     while True:
-        min_pt = piru * PT
+        min_pt = {"piru": piru}     # piru * PT
         if piru <= 0.01:
             break
         if method_prob == "ours":
@@ -80,7 +80,7 @@ def MOP(
             fit_func_data = {
                 "bss": bss.copy(),
                 "association_array": association_array.copy(),
-                "min_pt": min_pt,
+                "min_pt": min_pt,   # min_pt can be dict with piru prop
             }
             pso_prob = PSO(
                 fit_func_data=fit_func_data,
@@ -101,7 +101,7 @@ def MOP(
         else:
             obf = obf_new
         association_array, obf_new = UAC(
-            bss.copy(), bss_weights.copy(), association_array.copy(), min_pt, obf
+            bss.copy(), bss_weights.copy(), association_array.copy(), min_pt, obf   # min_pt can be dict with piru prop
         )
         if obf_new == obf:
             print("Cut the PIRU in half")
@@ -116,7 +116,7 @@ def MOP(
                         association_array.copy(),
                         bss_weights,
                         aerial_bss_indexes,
-                        min_pt,
+                        min_pt,     # min_pt can be dict with piru prop
                         obf,
                     )
                 elif method_upas == "pso":
@@ -130,7 +130,7 @@ def MOP(
                         "ground_bss": ground_bss.copy(),
                         "bss_weights": bss_weights,
                         "association_array": association_array.copy(),
-                        "min_pt": min_pt,
+                        "min_pt": min_pt,   # min_pt can be dict with piru prop
                     }
                     pso_upas = PSO(
                         fit_func_data=fit_func_data,
@@ -443,7 +443,7 @@ def FPA(dataset_index, max_aerial, p, max_k, method):
             )
         # ------------------------------
         aerial_user_number = int(len(repo.users) * p)
-        min_pt = PIRU * PT
+        min_pt = None   # PIRU * PT
         aerial_user_indexes, _ = specify_aerial_users(
             mixed_bss,
             association_array,

@@ -52,7 +52,7 @@ def inc_counter(obf, alg, piru, detail_tuple):
 def PROB(bss, bss_weights, association_array, R, piru, global_obf):
     logger.info("--------------> Updating bss powers with piru = %0.2f" % piru)
     start = time.time()
-    min_pt = PIRU * PT
+    min_pt = None   # PIRU * PT
     number_bs = len(bss)
     window_power = min(number_bs, int(PERCENT_POWER * number_bs))
     for iter in range(MAX_ITERATION_POWER):

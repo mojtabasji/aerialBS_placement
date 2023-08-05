@@ -5,15 +5,25 @@ MAX_K = 2
 
 # Pij constants
 PT = 2
+PT_AERIAL = 5    # watt
+PT_GROUND = 20     # watt
+PT_AERIAL_MIN = 0.5   # watt
+PT_GROUND_MIN = 2    # watt
 ## power index reduction unit
 PIRU = 0.1   # reduction unit
 DT = 1
 DR = 1
 F = 1.6  # GHz
-LAMBDA = 1 / F  # signal Wavelength
+LAMBDA = 0.15   # 1 / F  # signal Wavelength
 PI = 3.14
-SIGMA2 = 0  # noise power in dBm
-B = 1   # bandwidth
+SIGMA2 = 10 ** (-108 / 10)  # noise power in dBm to watt
+B = 20   # bandwidth in MHz # default 1
+ALPHA_E = 4.88
+BETA_E = 0.43
+H_AERIAL = 25   # 50
+H_GROUND = 10
+ZITA_LOS = 0.1
+ZITA_NLOS = 21
 
 
 PERCENT_POWER = 1
@@ -124,3 +134,11 @@ NUMBER_MARKER = [
     "$24$",
     "$25$",
 ]
+
+
+class DynamicVariables:
+    def __init__(self):
+        self.arial_indexes = []
+
+
+DYNAMIC_VAR = DynamicVariables()

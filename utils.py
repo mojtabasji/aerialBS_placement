@@ -152,3 +152,11 @@ def algorithms_contribution(alg_list, obf_list, init_obf):
             imp_dict[k3] * 100 / all_imp,
         )
     )
+
+
+def decibel_to_watt(db):
+    return 10 ** (db / 10)
+
+
+def watt_to_decibel(watt):
+    return 10 * np.log10(watt)

@@ -114,7 +114,7 @@ def setup_aerial_bss_auto(
     if mixed_bss is not None:
         bss = np.concatenate((mixed_bss, aerial_bss), axis=0)
         aerial_user_number = int(len(repo.users) * worst_users_percent)
-        min_pt = PIRU * PT
+        min_pt = None   # PIRU * PT
         aerial_user_indexes, association_array = specify_aerial_users(
             mixed_bss,
             mixed_association_array,
@@ -139,6 +139,7 @@ def setup_aerial_bss_auto(
             np.array(repo.users), len(bss), np.array(bss)
         )
         bss = centroids.copy()
+    DYNAMIC_VAR.arial_indexes = aerial_bss_indexes
     return bss, association_array, aerial_bss_indexes, aerial_user_indexes
 
 
@@ -159,6 +160,7 @@ def setup_aerial_bss_manual(ground_bss, aerial_bss, ground_association_array):
     for i in range(len(association_array)):
         if not association_array[i] in aerial_bss_indexes:
             association_array[i] = ground_association_array[i]
+    DYNAMIC_VAR.arial_indexes = aerial_bss_indexes
     return bss, association_array, aerial_bss_indexes, aerial_user_indexes
 
 
