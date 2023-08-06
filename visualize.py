@@ -235,8 +235,10 @@ def plot_topology(
     fig.show()
 
 
-def plot_convergence(x_axis, y_axis, alg_list, result_path=None):
+def plot_convergence(x_axis, y_axis, alg_list, result_path=None, z_type=False):
     x_label, y_label = "iteration", "obf"
+    if z_type:
+        y_label = "obf (sum of users rate)"
     plt.style.use("fivethirtyeight")
     fig, ax = plt.subplots(nrows=1, ncols=1)
     color_dict = {"PROB": "red", "UAC": "black", "UPAS": "blue"}

@@ -2,7 +2,7 @@ import os
 import sys, time, numpy as np
 import json
 from constants import *
-from network import calc_R, objective_function
+from network import calc_R, objective_function, objective_function_z
 from repository import Repository
 from updates import PROB, UAC, UPAS
 from dataset import (
@@ -60,8 +60,11 @@ def MOP(
     piru = PIRU
     R = calc_R(bss, association_array, bss_weights, min_pt)
     repo.obf_init = objective_function(R)
+    repo.obf_init_z = objective_function_z(R)
     obf = repo.obf_init
+    obf_z = repo.obf_init_z
     repo.obf_time_list.append((obf, 0))
+    repo.obf_time_list_z.append((obf_z, 0))
     logger.info("objective= %.3f" % obf)
     while True:
         min_pt = {"piru": piru}     # piru * PT
@@ -243,6 +246,14 @@ def mop_wrapper(
         (repo.obf_list),
         (repo.alg_list),
         result_path=(get_pic_path(plot_dir)),
+    )
+    repo.fix_obf_z()
+    plot_convergence(
+        list(range(1, repo.global_counter + 1)),
+        (repo.obf_z_list),
+        (repo.alg_list),
+        result_path=(get_pic_path(plot_dir)),
+        z_type=True,
     )
     return final_obf, final_bss, final_bss_weights
 
@@ -499,6 +510,7 @@ def FPA(dataset_index, max_aerial, p, max_k, method):
                         "obf_init": repo.obf_init,
                         "obf": final_obf,
                         "obf_list": repo.obf_list,
+                        "obf_z_list": repo.obf_z_list,
                         "alg_list": repo.alg_list,
                         "piru_list": repo.piru_list,
                     }

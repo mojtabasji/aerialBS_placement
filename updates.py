@@ -7,6 +7,7 @@ from network import (
     change_user_link,
     calc_R,
     objective_function,
+    objective_function_z,
     get_bss_priority,
 )
 from constants import *
@@ -18,9 +19,10 @@ from repository import Repository
 repo = Repository()
 
 
-def inc_counter(obf, alg, piru, detail_tuple):
+def inc_counter(obf, alg, piru, detail_tuple, obf_z=None):
     repo.global_counter += 1
     repo.obf_list.append(obf)
+    repo.obf_z_list.append(obf_z)
     repo.alg_list.append(alg)
     repo.piru_list.append(piru)
 
@@ -49,7 +51,7 @@ def inc_counter(obf, alg, piru, detail_tuple):
 
 
 # update_bss_power   ----> PROB
-def PROB(bss, bss_weights, association_array, R, piru, global_obf):
+def PROB(bss, bss_weights, association_array, R, piru, global_obf: float):
     logger.info("--------------> Updating bss powers with piru = %0.2f" % piru)
     start = time.time()
     min_pt = None   # PIRU * PT
@@ -60,6 +62,7 @@ def PROB(bss, bss_weights, association_array, R, piru, global_obf):
         bss_priority = get_bss_priority(R, bss, association_array)
         bss_weights_temp = copy.copy(bss_weights)
         obf_new = global_obf
+        obf_z = None
         index_max = None
         count = 0
         for index in bss_priority:
@@ -70,14 +73,16 @@ def PROB(bss, bss_weights, association_array, R, piru, global_obf):
                 R_temp = calc_R(bss, association_array, bss_weights_temp, min_pt)
                 bss_weights_temp[index] += piru
                 obf_temp = objective_function(R_temp)
+                obf_z_temp = objective_function_z(R_temp)
                 if obf_temp > obf_new:
                     index_max = index
                     obf_new = obf_temp
+                    obf_z = obf_z_temp
                 count += 1
                 if count > window_power:
                     break
         if index_max is None:
-            inc_counter(obf_new, "PROB", piru, (None, None, None))
+            inc_counter(obf_new, "PROB", piru, (None, None, None), obf_z=obf_z)
             end = time.time()
             t = (end - start) / 60
             repo.obf_time_list.append((global_obf, t))
@@ -93,6 +98,7 @@ def PROB(bss, bss_weights, association_array, R, piru, global_obf):
                 "PROB",
                 piru,
                 (index_max, old_weight, bss_weights[index_max]),
+                obf_z=obf_z,
             )
             print(
                 "better result ---> changing power of bss %d with weight %.2f ---> obf_old= %.4f obf_new= %.4f"
@@ -114,6 +120,7 @@ def UAC(bss, bss_weights, association_array, min_pt, global_obf):
     window_user = min(len(repo.users), int(PERCENT_USER * len(repo.users)))
     n_association_change = 0
     obf_new = global_obf
+    obf_z = None
     for iter in range(MAX_ITERATION_USER):
         gama = calc_gama(bss, association_array, bss_weights, min_pt)
         users_priority = get_sorted_gama_index(gama)
@@ -128,14 +135,16 @@ def UAC(bss, bss_weights, association_array, min_pt, global_obf):
                 gama_temp = calc_gama(bss, association_array_temp, bss_weights, min_pt)
                 R_temp = calc_R(bss, association_array_temp, bss_weights, min_pt)
                 obf_temp = objective_function(R_temp)
+                obf_z_temp = objective_function_z(R_temp)
                 if obf_temp > obf_new:
                     obf_new = obf_temp
+                    obf_z = obf_z_temp
                     association_array_max = copy.copy(association_array_temp)
                     n_better += 1
                     if n_better >= window_user:
                         break
         if association_array_max is None:
-            inc_counter(obf_new, "UAC", -1, (None, None, None))
+            inc_counter(obf_new, "UAC", -1, (None, None, None), obf_z=obf_z)
             print("final user ", i)
             end = time.time()
             t = (end - start) / 60
@@ -157,6 +166,7 @@ def UAC(bss, bss_weights, association_array, min_pt, global_obf):
                     association_array[users_priority[i]],
                     association_array_temp[users_priority[i]],
                 ),
+                obf_z=obf_z,
             )
             print(
                 "better result ---> user %d pre_bss= %d  gama1= %.2f   next_bss= %d  gama2= %.2f --->  obf_old= %.4f  obf_new= %.4f"
@@ -191,6 +201,7 @@ def UPAS(bss, association_array, bss_weights, aerial_bss_indexes, min_pt, global
     new_bss = bss.copy()
     changed_bss = []
     obf_new = global_obf
+    obf_z = None
     if len(users_dict) == len(bss):
         for iter in range(len(bss)):
             index_max = -1
@@ -207,10 +218,12 @@ def UPAS(bss, association_array, bss_weights, aerial_bss_indexes, min_pt, global
                 if get_distance(temp_bs.astype(int), bs.astype(int)) > 0:
                     R_new = calc_R(temp_bss, association_array, bss_weights, min_pt)
                     obf_temp = objective_function(R_new)
+                    obf_z_temp = objective_function_z(R_new)
                     if obf_temp > obf_new:
                         index_max = j
                         new_bs = temp_bs.copy()
                         obf_new = obf_temp
+                        obf_z = obf_z_temp
 
             if index_max != -1:
                 old_position = new_bss[index_max].copy()
@@ -225,10 +238,11 @@ def UPAS(bss, association_array, bss_weights, aerial_bss_indexes, min_pt, global
                         [int(old_position[0]), int(old_position[1])],
                         [int(new_position[0]), int(new_position[1])],
                     ),
+                    obf_z=obf_z,
                 )
                 changed_bss.append(index_max)
             else:
-                inc_counter(obf_new, "UPAS", -1, (None, None, None))
+                inc_counter(obf_new, "UPAS", -1, (None, None, None), obf_z=obf_z)
                 break
         logger.info("obf_old = %0.4f , obf_new = %0.4f" % (global_obf, obf_new))
         global_obf = obf_new
