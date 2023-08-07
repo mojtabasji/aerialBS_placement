@@ -84,7 +84,7 @@ def objective_function_z(R):
 
 
 def objective_function_y(R):
-    return pow(np.sum(R), 2) / len(R) * np.sum(np.power(R, 2))
+    return pow(np.sum(R), 2) / (len(R) * np.sum(np.power(R, 2)))
 
 
 # Indexes of sorted average rate of each base station
