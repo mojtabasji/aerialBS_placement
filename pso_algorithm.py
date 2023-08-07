@@ -2,7 +2,7 @@ import numpy as np
 import timeit
 import copy
 from updates import inc_counter
-from network import calc_R, objective_function, objective_function_z
+from network import calc_R, objective_function, objective_function_z, objective_function_y
 
 
 class PSO(object):
@@ -59,7 +59,7 @@ class PSO(object):
                 self.fit_func_data["min_pt"],
             )
         if return_z:
-            return objective_function(R), objective_function_z(R)
+            return objective_function(R), objective_function_z(R), objective_function_y(R)
         return objective_function(R)
 
     def update_position(self, x, v):
@@ -138,11 +138,11 @@ class PSO(object):
                 end2 = timeit.default_timer()
                 sum_time += end2 - start2
             end1 = timeit.default_timer()
-            new_obf, obf_z = self.func(self.g_best, return_z=True)
+            new_obf, obf_z, obt_y = self.func(self.g_best, return_z=True)
             print(
                 "%.3f  %s %d" % (new_obf, my_formatted_list, ite)
             )  # ite,'***',self.func(self.g_best),'***',self.g_best
-            inc_counter(new_obf, self.alg, -1, (0, 0, 0), obf_z=obf_z)
+            inc_counter(new_obf, self.alg, -1, (0, 0, 0), obf_z=obf_z, obt_y=obt_y)
             if np.isclose(old_obf, new_obf, rtol=0, atol=10**-3):
                 number_equal += 1
             else:

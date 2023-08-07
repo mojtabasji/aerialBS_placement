@@ -17,6 +17,7 @@ class Repository(metaclass=SingletonMeta):
     obf_time_list_z = []
     obf_list = []
     obf_z_list = []
+    obf_y_list = []
     alg_list = []
     piru_list = []
     detail_list = []
@@ -27,4 +28,7 @@ class Repository(metaclass=SingletonMeta):
         for i in range(len(self.obf_z_list)):
             if self.obf_z_list[i] is None:
                 self.obf_z_list[i] = self.obf_z_list[i - 1]
+            if self.obf_y_list[i] is None:
+                self.obf_y_list[i] = self.obf_y_list[i - 1]
+
 

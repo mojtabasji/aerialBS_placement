@@ -83,6 +83,10 @@ def objective_function_z(R):
     return np.sum(R)
 
 
+def objective_function_y(R):
+    return pow(np.sum(R), 2) / len(R) * np.sum(np.power(R, 2))
+
+
 # Indexes of sorted average rate of each base station
 def get_bss_priority(R, bss, bss_indexes):
     sum_R_array = np.zeros(len(bss))

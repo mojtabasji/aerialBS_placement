@@ -253,7 +253,14 @@ def mop_wrapper(
         (repo.obf_z_list),
         (repo.alg_list),
         result_path=(get_pic_path(plot_dir)),
-        z_type=True,
+        z_type=1,
+    )
+    plot_convergence(
+        list(range(1, repo.global_counter + 1)),
+        (repo.obf_y_list),
+        (repo.alg_list),
+        result_path=(get_pic_path(plot_dir)),
+        z_type=2,
     )
     return final_obf, final_bss, final_bss_weights
 

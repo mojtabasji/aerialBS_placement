@@ -105,6 +105,7 @@ def reset_repository():
     repo.obf_time_list = []
     repo.obf_list = []
     repo.obf_z_list = []
+    repo.obf_y_list = []
     repo.alg_list = []
     repo.piru_list = []
     repo.detail_list = []
