@@ -142,7 +142,7 @@ class PSO(object):
             print(
                 "%.3f  %s %d" % (new_obf, my_formatted_list, ite)
             )  # ite,'***',self.func(self.g_best),'***',self.g_best
-            inc_counter(new_obf, self.alg, -1, (0, 0, 0), obf_z=obf_z, obt_y=obt_y)
+            inc_counter(new_obf, self.alg, -1, (0, 0, 0), obf_z=obf_z, obf_y=obt_y)
             if np.isclose(old_obf, new_obf, rtol=0, atol=10**-3):
                 number_equal += 1
             else:
