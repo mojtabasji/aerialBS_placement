@@ -172,16 +172,13 @@ def write2text(array, titles, file_path):
         for x_y in array:
             f.write(titles[title_id] + "\n")
             title_id += 1
-            context_x = "xtick={"
-            for i in x_y[0]:
-                context_x += str(round(i,2)) + ","
-            context_x += "},\n"
-            f.write(context_x)
-            context_y = "ytick={"
-            for i in x_y[1]:
-                context_y += str(round(i,2)) + ","
-            context_y += "},\n"
-            f.write(context_y)
+            context = "coordinates {"
+            for i in range(len(x_y[0])):
+                context += "(" + str(round(x_y[0][i], 2)) + "," + str(round(x_y[1][i], 2)) + ")"
+                # if i != len(x_y[0]) - 1:
+                    # context += ","
+            context += "}\n"
+            f.write(context)
         f.close()
 
 
