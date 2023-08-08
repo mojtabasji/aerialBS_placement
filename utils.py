@@ -162,3 +162,30 @@ def decibel_to_watt(db):
 
 def watt_to_decibel(watt):
     return 10 * np.log10(watt)
+
+
+def write2text(array, titles, file_path):
+    # array = [ [[1,2,3], [4,5,6]], [[7,8,9], [10,11,12] ] ]
+    file_path = file_path.replace(".png", ".txt")
+    with open(file_path, "w") as f:
+        title_id = 0
+        for x_y in array:
+            f.write(titles[title_id] + "\n")
+            title_id += 1
+            context_x = "xtick={"
+            for i in x_y[0]:
+                context_x += str(i) + ","
+            context_x += "},\n"
+            f.write(context_x)
+            context_y = "ytick={"
+            for i in x_y[1]:
+                context_y += str(i) + ","
+            context_y += "},\n"
+            f.write(context_y)
+        f.close()
+
+
+
+
+
+

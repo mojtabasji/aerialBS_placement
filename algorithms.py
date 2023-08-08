@@ -25,6 +25,7 @@ from utils import (
     delete,
     save_mop_results,
     save_best_fpa_results,
+    write2text,
 )
 from log import logger
 from pso_algorithm import PSO
@@ -262,6 +263,14 @@ def mop_wrapper(
         result_path=(get_pic_path(plot_dir)),
         z_type=2,
     )
+    res_titles = [ "bss_weights", "obf", "obf (sum of rate)", "fairness"]
+    res =[
+        [final_bss_weights.tolist(), [range(len(bss_weights))]],
+        [repo.obf_list, list(range(1, repo.global_counter + 1))],
+        [repo.obf_z_list, list(range(1, repo.global_counter + 1))],
+        [repo.obf_y_list, list(range(1, repo.global_counter + 1))],
+    ]
+    write2text(res, res_titles, get_pic_path(plot_dir))
     return final_obf, final_bss, final_bss_weights
 
 
