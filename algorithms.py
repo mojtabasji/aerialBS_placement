@@ -265,10 +265,10 @@ def mop_wrapper(
     )
     res_titles = [ "bss_weights", "obf", "obf (sum of rate)", "fairness"]
     res =[
-        [final_bss_weights.tolist(), [range(len(bss_weights))]],
-        [repo.obf_list, list(range(1, repo.global_counter + 1))],
-        [repo.obf_z_list, list(range(1, repo.global_counter + 1))],
-        [repo.obf_y_list, list(range(1, repo.global_counter + 1))],
+        [list(range(len(bss_weights))), final_bss_weights.tolist()],
+        [list(range(1, repo.global_counter + 1)), repo.obf_list],
+        [list(range(1, repo.global_counter + 1)), repo.obf_z_list],
+        [list(range(1, repo.global_counter + 1)), repo.obf_y_list],
     ]
     write2text(res, res_titles, get_pic_path(plot_dir))
     return final_obf, final_bss, final_bss_weights

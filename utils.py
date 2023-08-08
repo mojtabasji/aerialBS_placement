@@ -174,12 +174,12 @@ def write2text(array, titles, file_path):
             title_id += 1
             context_x = "xtick={"
             for i in x_y[0]:
-                context_x += str(i) + ","
+                context_x += str(round(i,2)) + ","
             context_x += "},\n"
             f.write(context_x)
             context_y = "ytick={"
             for i in x_y[1]:
-                context_y += str(i) + ","
+                context_y += str(round(i,2)) + ","
             context_y += "},\n"
             f.write(context_y)
         f.close()
