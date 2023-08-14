@@ -182,6 +182,20 @@ def write2text(array, titles, file_path):
         f.close()
 
 
+def write_rate_tofile(file_path, rate):
+    file_path = file_path.replace(".png", ".txt")
+    with open(file_path, "w") as f:
+        pair_index_rate = str(list(enumerate(rate)))
+        pair_index_rate = pair_index_rate.replace("),", ")")
+        pair_index_rate = pair_index_rate.replace("[", "")
+        pair_index_rate = pair_index_rate.replace("]", "")
+        f.write("coordinates {" + pair_index_rate + "}")
+        f.write("\n ")
+        min_max = "min: " + str(rate.min()) + "\n " + "max: " + str(rate.max())
+        f.write(min_max)
+        f.close()
+
+
 
 
 

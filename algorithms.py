@@ -26,6 +26,7 @@ from utils import (
     save_mop_results,
     save_best_fpa_results,
     write2text,
+    write_rate_tofile
 )
 from log import logger
 from pso_algorithm import PSO
@@ -263,6 +264,8 @@ def mop_wrapper(
         result_path=(get_pic_path(plot_dir)),
         z_type=2,
     )
+    final_user_rate = calc_R(final_bss, final_association_array, final_bss_weights, {"piru":0.1})
+    write_rate_tofile(get_pic_path(plot_dir), final_user_rate)
     res_titles = [ "bss_weights", "obf", "obf (sum of rate)", "fairness"]
     res =[
         [list(range(len(bss_weights))), final_bss_weights.tolist()],
